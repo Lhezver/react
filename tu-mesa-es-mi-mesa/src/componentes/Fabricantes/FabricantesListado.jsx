@@ -1,8 +1,62 @@
+import axios from "axios";
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 
 function FabricantesListado() {
-    return (
-      <>
+
+  const [fabricantes, setFabricantes] = useState([]);
+  const [busqueda, setBusqueda] = useState('');
+  const [idborrar, setIdBorrar] = useState(0);
+  const [fabricante, setFabricante] = useState({
+    nombre: '',
+    direccion: '',
+    telefono: 0,
+    contacto: '',
+    observaciones: '',
+    id: 0
+  });
+
+  useEffect(() => {
+    ObtenerFabricantes()
+  }, [])
+
+  const ObtenerFabricantes = () => {
+    if (busqueda == '') {
+      axios.get(`http://localhost:8000/fabricantes/`)
+        .then((response) => {
+          setFabricantes(response.data);
+        })
+        .catch((e) => alert(e));
+    }
+    else {
+      axios.get(`http://localhost:8000/paises/buscar/${busqueda}`)
+        .then((response) => {
+          setFabricantes(response.data);
+        })
+        .catch((e) => alert(e));
+    }
+  }
+
+  const SetearBorrar = (fabricanteId) => {
+    axios.get(`http://localhost:8000/fabricantes/${fabricanteId}`)
+      .then(response =>{
+        setFabricante(response.data);
+      })
+      .catch(error => alert(error))
+  }
+
+  const EliminarFabricante = () => {
+    axios.delete(`http://localhost:8000/fabricantes/${fabricante.id}`)
+        .then(() => {
+          ObtenerFabricantes()
+        })
+        .catch(() => {
+            alert('Hubo un error al eliminar el fabricante')
+        })
+}
+
+  return (
+    <>
       <div className="row d-flex justify-content-center mt-2">
         <div className="col-4 d-flex justify-content-center">
           <Link to='/fabricante/nuevo'>
@@ -24,44 +78,52 @@ function FabricantesListado() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Proovedor1</td>
-              <td>Dirección 1</td>
-              <td>154469748</td>
-              <td>proovedor1@gmail.com</td>
-              <td>
-                <button type="button" className="btn btn-warning">Editar</button>
-                <button type="button" className="btn btn-danger">Borrar</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Proovedor2</td>
-              <td>Dirección 2</td>
-              <td>154469748</td>
-              <td>proovedor2@gmail.com</td>
-              <td>
-                <button type="button" className="btn btn-warning">Editar</button>
-                <button type="button" className="btn btn-danger">Borrar</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Proovedor3</td>
-              <td>Dirección 3</td>
-              <td>154469748</td>
-              <td>proovedor3@gmail.com</td>
-              <td>
-                <button type="button" className="btn btn-warning">Editar</button>
-                <button type="button" className="btn btn-danger">Borrar</button>
-              </td>
-            </tr>
+            {fabricantes.map((fabricante) => (
+              <tr key={fabricante.id}>
+                <th scope="row">{fabricante.id}</th>
+                <td>{fabricante.nombre}</td>
+                <td>{fabricante.direccion}</td>
+                <td>{fabricante.telefono}</td>
+                <td>{fabricante.contacto}</td>
+                <td>
+                  <Link to={'/fabricante/' + fabricante.id}>
+                    <button type="button" className="btn btn-warning">Editar</button>
+                  </Link>
+                  <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearBorrar(fabricante.id)}>Borrar</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      </>
-    );
-  }
-  
-  export default FabricantesListado;
+
+      {/*Modal borrar*/}
+      <div className="modal fade" id="modalBorrar">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="modalBorrarLabel">Eliminar Fabricante</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div className="modal-body">
+              <p>¿Desea borrar el siguiente fabricante?</p>
+              <p>Nombre: {fabricante.nombre}</p>
+              <p>Dirección: {fabricante.direccion}</p>
+              <p>Teléfono: {fabricante.telefono}</p>
+              <p>Contacto: {fabricante.contacto}</p>
+              <p>Observación: {fabricante.observaciones}</p>
+              <p>Nº del fabricante asignado automáticamente: {fabricante.id}</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={()=>EliminarFabricante()}>Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </>
+  );
+}
+
+export default FabricantesListado;

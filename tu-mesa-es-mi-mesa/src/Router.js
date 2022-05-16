@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import MueblesListado from './componentes/Muebles/MueblesListado';
 import MueblesFormulario from './componentes/Muebles/MueblesFormulario';
@@ -9,6 +9,28 @@ import VentasListado from './componentes/Ventas/VentasListado';
 import VentasDetalle from './componentes/Ventas/VentasDetalle';
 
 const Router = () => {
+
+    const [carrito, setCarrito] = useState(
+        [
+            {
+                codigoPropio: 1,
+                codigoDelFabricante: 1,
+                numSerieAlfanumerico: 'a1',
+                fecha: '12/05/2022',
+                categoria: 'Mesa',
+                subcategoria: 'Comedor',
+                precio: 13000
+            },
+            {
+                codigoPropio: 2,
+                codigoDelFabricante: 1,
+                numSerieAlfanumerico: 'a2',
+                fecha: '12/05/2022',
+                categoria: 'Silla',
+                subcategoria: 'Jardin',
+                precio: 7500
+            }
+        ]);
     return (
         <BrowserRouter>
             <div className='row'>
@@ -22,7 +44,7 @@ const Router = () => {
             </div>
 
             <Routes>
-                <Route path='/muebles' element={<MueblesListado />} />
+                <Route path='/muebles' element={<MueblesListado getCarrito={carrito} setCarrito={setCarrito} />} />
                 <Route path='/mueble/nuevo' element={<MueblesFormulario />} />
                 <Route path='/mueble/:idMueble' element={<MueblesFormulario />} />
 

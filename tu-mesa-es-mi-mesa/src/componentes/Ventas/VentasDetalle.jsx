@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function VentasDetalle() {
     return (
         <>
@@ -43,6 +45,14 @@ function VentasDetalle() {
                     </tbody>
                 </table>
             </div>
+
+            <div className="row d-flex justify-content-center mt-2">
+        <div className="col-4 d-flex justify-content-center">
+          <Link to='/ventas'>
+            <button type="button" className="btn btn-primary">Volver</button>
+          </Link>
+        </div>
+      </div>
         </>
     );
 }

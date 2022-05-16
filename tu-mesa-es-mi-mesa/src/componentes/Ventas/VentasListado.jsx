@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 function VentasListado() {
     return (
         <>
-        <div className="row"><h2 className="text-center">Ventas</h2></div>
+            <div className="row"><h2 className="text-center">Ventas</h2></div>
             <div className="row">
                 <table className="table">
                     <thead>
@@ -18,7 +20,9 @@ function VentasListado() {
                             <td>Cliente1</td>
                             <td>10</td>
                             <td>
-                                <button type="button" className="btn btn-success">Ver</button>
+                                <Link to='/venta/1'>
+                                    <button type="button" className="btn btn-success">Ver</button>
+                                </Link>
                             </td>
                         </tr>
                         <tr>
@@ -26,7 +30,9 @@ function VentasListado() {
                             <td>Cliente2</td>
                             <td>100</td>
                             <td>
-                                <button type="button" className="btn btn-success">Ver</button>
+                                <Link to='/venta/1'>
+                                    <button type="button" className="btn btn-success">Ver</button>
+                                </Link>
                             </td>
                         </tr>
                         <tr>
@@ -34,7 +40,9 @@ function VentasListado() {
                             <td>Cliente3</td>
                             <td>1000</td>
                             <td>
-                                <button type="button" className="btn btn-success">Ver</button>
+                                <Link to='/venta/1'>
+                                    <button type="button" className="btn btn-success">Ver</button>
+                                </Link>
                             </td>
                         </tr>
                     </tbody>
