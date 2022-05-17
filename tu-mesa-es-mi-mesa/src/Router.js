@@ -7,6 +7,8 @@ import FabricantesFormulario from './componentes/Fabricantes/FabricantesFormular
 import PedidosListado from './componentes/Pedidos/PedidosListado';
 import VentasListado from './componentes/Ventas/VentasListado';
 import VentasDetalle from './componentes/Ventas/VentasDetalle';
+import CategoriasListado from './componentes/Categorias/CategoriasListado';
+import CategoriasFormulario from './componentes/Categorias/CategoriasFormulario';
 
 const Router = () => {
 
@@ -36,21 +38,27 @@ const Router = () => {
             <div className='row'>
                 <nav className="navbar navbar-dark bg-primary">
 
+                <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/fabricantes'>Fabricantes</NavLink>
+                <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/categorias'>Categorías</NavLink>
                     <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/muebles'>Muebles</NavLink>
-                    <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/fabricantes'>Fabricantes</NavLink>
                     <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/pedidos'>Pedidos</NavLink>
                     <NavLink className={({ isActive }) => (isActive ? "nav-link text-white fw-bold" : "nav-link text-white")} to='/ventas'>Ventas</NavLink>
                 </nav>
             </div>
 
             <Routes>
+            <Route path='/fabricantes' element={<FabricantesListado />} />
+                <Route path='/fabricante/nuevo' element={<FabricantesFormulario />} />
+                <Route path='/fabricante/:idFabricante' element={<FabricantesFormulario />} />
+
+                <Route path='/categorias' element={<CategoriasListado />} />
+                <Route path='/categoria/nuevo' element={<CategoriasFormulario />} />
+                <Route path='/categoria/:idCategoria' element={<CategoriasFormulario />} />
+
                 <Route path='/muebles' element={<MueblesListado getCarrito={carrito} setCarrito={setCarrito} />} />
                 <Route path='/mueble/nuevo' element={<MueblesFormulario />} />
                 <Route path='/mueble/:idMueble' element={<MueblesFormulario />} />
 
-                <Route path='/fabricantes' element={<FabricantesListado />} />
-                <Route path='/fabricante/nuevo' element={<FabricantesFormulario />} />
-                <Route path='/fabricante/:idFabricante' element={<FabricantesFormulario />} />
 
                 <Route path='/pedidos' element={<PedidosListado />} />
 

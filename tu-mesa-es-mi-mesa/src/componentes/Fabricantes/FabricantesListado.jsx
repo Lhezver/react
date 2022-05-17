@@ -6,7 +6,6 @@ function FabricantesListado() {
 
   const [fabricantes, setFabricantes] = useState([]);
   const [busqueda, setBusqueda] = useState('');
-  const [idborrar, setIdBorrar] = useState(0);
   const [fabricante, setFabricante] = useState({
     nombre: '',
     direccion: '',

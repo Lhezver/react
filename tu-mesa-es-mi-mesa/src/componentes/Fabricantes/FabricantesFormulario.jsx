@@ -59,7 +59,7 @@ function FabricantesFormulario() {
 
   const ObtenerFabricante = () => {
     axios.get(`http://localhost:8000/fabricantes/${params.idFabricante}`)
-      .then(response =>{
+      .then(response => {
         setFabricante(response.data);
         inputTelefono.current.value = response.data.telefono;
       })
@@ -82,23 +82,23 @@ function FabricantesFormulario() {
         <form>
           <div className="mb-3">
             <label htmlFor="nombre" className="col-form-label">Nombre:</label>
-            <input type="text" className="form-control" ref={inputNombre} defaultValue={fabricante.nombre}></input>
+            <input type="text" className="form-control" id="nombre" ref={inputNombre} defaultValue={fabricante.nombre}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="direccion" className="col-form-label">Dirección:</label>
-            <input type="text" className="form-control" ref={inputDireccion} defaultValue={fabricante.direccion}></input>
+            <input type="text" className="form-control" id="direccion" ref={inputDireccion} defaultValue={fabricante.direccion}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="telefono" className="col-form-label">Teléfono:</label>
-            <input type="number" className="form-control" ref={inputTelefono} defaultValue={fabricante.telefono}></input>
+            <input type="number" className="form-control" id="telefono" ref={inputTelefono} defaultValue={fabricante.telefono}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="contacto" className="col-form-label">Contacto:</label>
-            <input type="text" className="form-control" ref={inputContacto} defaultValue={fabricante.contacto}></input>
+            <input type="text" className="form-control" id="contacto" ref={inputContacto} defaultValue={fabricante.contacto}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="observaciones" className="col-form-label">Observaciones:</label>
-            <input type="text" className="form-control" ref={inputObservaciones} defaultValue={fabricante.observaciones}></input>
+            <input type="text" className="form-control" id="observaciones" ref={inputObservaciones} defaultValue={fabricante.observaciones}></input>
           </div>
         </form>
 
