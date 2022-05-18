@@ -64,7 +64,6 @@ function MueblesFormulario() {
         inputIdCategoria.current.value = response.data.id_categoria;
         inputIdFabricante.current.value = response.data.id_fabricante;
         inputPrecio.current.value = response.data.precio;
-        console.log(response.data);
       })
       .catch(error => alert(error))
   }

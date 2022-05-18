@@ -8,8 +8,7 @@ function CategoriasListado() {
     const [categoria, setCategoria] = useState({
         id: 0,
         categoria: '',
-        subcategoria: '',
-        cantidad: 0
+        subcategoria: ''
     });
 
     useEffect(() => {
@@ -68,7 +67,6 @@ function CategoriasListado() {
                             <th scope="col">#</th>
                             <th scope="col">Categoría</th>
                             <th scope="col">Subcategoría</th>
-                            <th scope="col">Cantidad</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -78,7 +76,6 @@ function CategoriasListado() {
                                 <th scope="row">{categoria.id}</th>
                                 <td>{categoria.categoria}</td>
                                 <td>{categoria.subcategoria}</td>
-                                <td>{categoria.cantidad}</td>
                                 <td>
                                     <Link to={'/categoria/' + categoria.id}>
                                         <button type="button" className="btn btn-warning">Editar</button>

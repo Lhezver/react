@@ -11,7 +11,6 @@ function MueblesListado() {
   const navigate = useNavigate();
 
   const [muebles, setMuebles] = useState([]);
-  const [busqueda, setBusqueda] = useState('');
   const [mueble, setMueble] = useState({
     nro_serie: '',
     precio: 0,
@@ -42,25 +41,18 @@ function MueblesListado() {
   const inputNombreCliente = useRef();
   const inputDNICliente = useRef();
 
+  const inputFiltro = useRef();
+
   useEffect(() => {
     ObtenerMuebles()
   }, [])
 
   const ObtenerMuebles = () => {
-    if (busqueda == '') {
-      axios.get(`http://localhost:8000/muebles/`)
-        .then((response) => {
-          setMuebles(response.data);
-        })
-        .catch((e) => alert(e));
-    }
-    else {
-      axios.get(`http://localhost:8000/paises/buscar/${busqueda}`)
-        .then((response) => {
-          setMuebles(response.data);
-        })
-        .catch((e) => alert(e));
-    }
+    axios.get(`http://localhost:8000/muebles/`)
+      .then((response) => {
+        setMuebles(response.data);
+      })
+      .catch((e) => alert(e));
   }
 
   const SetearMueble = (muebleId) => {
@@ -111,43 +103,30 @@ function MueblesListado() {
       })
   }
 
+  const MueblesFabricantes = () => {
+    axios.get(`http://localhost:8000/muebles/fabricantes/${inputFiltro.current.value}`)
+      .then((response) => {
+        setMuebles(response.data);
+      })
+      .catch((e) => alert(e));
+  }
+
+  const FabricantesMuebles = () => {
+    axios.get(`http://localhost:8000/muebles/categorias/${inputFiltro.current.value}`)
+      .then((response) => {
+        setMuebles(response.data);
+      })
+      .catch((e) => alert(e));
+  }
+
   return (
     <>
-      <div className="row">
-
-        <div className="form-check">
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"></input>
-          <label className="form-check-label" htmlFor="flexRadioDefault1">
-            muebles provistos por un mueble
-          </label>
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked></input>
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            muebles que proveen un mueble
-          </label>
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"></input>
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            muebles en stock
-          </label>
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"></input>
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            muebles pedidos
-          </label>
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"></input>
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            muebles que llegan en una determinada fecha
-          </label>
-        </div>
+      <div className="row mt-2">
         <div className="d-flex">
-          <input className="form-control me-1" type="search" placeholder="Search" aria-label="Search"></input>
-          <button className="btn btn-outline-success" type="submit">Search</button>
+          <input className="form-control me-1" type="search" placeholder="Filtro" aria-label="Search" ref={inputFiltro}></input>
+          <button className="btn btn-outline-success" type="submit" onClick={()=>MueblesFabricantes()}>muebles provistos por un fabricante</button>
+          <button className="btn btn-outline-success" type="submit" onClick={()=>FabricantesMuebles()}>fabricantes que proveen un mueble</button>
+          <button className="btn btn-outline-success" type="submit" onClick={()=>ObtenerMuebles()}>Quitar filtros</button>
         </div>
       </div>
 
@@ -180,12 +159,24 @@ function MueblesListado() {
                 <td>{mueble.fabricante.nombre}</td>
                 <td>{mueble.precio}</td>
                 <td>
-                  <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ventaModal" onClick={() => SetearMueble(mueble.nro_serie)}>Vender</button>
-                  <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pedidoModal" onClick={() => SetearMueble(mueble.nro_serie)}>Pedir</button>
-                  <Link to={'/mueble/' + mueble.nro_serie}>
-                    <button type="button" className="btn btn-warning">Editar</button>
+                  {mueble.disponible == 1 ?
+                    <div>
+                      <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ventaModal" onClick={() => SetearMueble(mueble.nro_serie)}>Vender</button>
+                      <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pedidoModal" onClick={() => SetearMueble(mueble.nro_serie)}>Pedir</button>
+                      <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearMueble(mueble.nro_serie)}>Borrar</button>
+                    </div>
+                    :
+                    <div>
+                      <button type="button" className="btn btn-primary disabled" data-bs-toggle="modal" data-bs-target="#ventaModal" onClick={() => SetearMueble(mueble.nro_serie)}>Vender</button>
+                      <button type="button" className="btn btn-secondary disabled" data-bs-toggle="modal" data-bs-target="#pedidoModal" onClick={() => SetearMueble(mueble.nro_serie)}>Pedir</button>
+                      <button type="button" className="btn btn-danger disabled" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearMueble(mueble.nro_serie)}>Borrar</button>
+                    </div>
+                  }
+                  <Link to={mueble.disponible == 1 ? '/mueble/' + mueble.nro_serie : '#'}>
+                    <button type="button" className={mueble.disponible == 1 ? "btn btn-warning" : "btn btn-warning disabled"}>Editar</button>
                   </Link>
-                  <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearMueble(mueble.nro_serie)}>Borrar</button>
+
+
                 </td>
               </tr>
             ))}
