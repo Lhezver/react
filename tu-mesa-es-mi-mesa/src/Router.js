@@ -11,28 +11,6 @@ import CategoriasListado from './componentes/Categorias/CategoriasListado';
 import CategoriasFormulario from './componentes/Categorias/CategoriasFormulario';
 
 const Router = () => {
-
-    const [carrito, setCarrito] = useState(
-        [
-            {
-                codigoPropio: 1,
-                codigoDelFabricante: 1,
-                numSerieAlfanumerico: 'a1',
-                fecha: '12/05/2022',
-                categoria: 'Mesa',
-                subcategoria: 'Comedor',
-                precio: 13000
-            },
-            {
-                codigoPropio: 2,
-                codigoDelFabricante: 1,
-                numSerieAlfanumerico: 'a2',
-                fecha: '12/05/2022',
-                categoria: 'Silla',
-                subcategoria: 'Jardin',
-                precio: 7500
-            }
-        ]);
     return (
         <BrowserRouter>
             <div className='row'>
@@ -55,7 +33,7 @@ const Router = () => {
                 <Route path='/categoria/nuevo' element={<CategoriasFormulario />} />
                 <Route path='/categoria/:idCategoria' element={<CategoriasFormulario />} />
 
-                <Route path='/muebles' element={<MueblesListado getCarrito={carrito} setCarrito={setCarrito} />} />
+                <Route path='/muebles' element={<MueblesListado />} />
                 <Route path='/mueble/nuevo' element={<MueblesFormulario />} />
                 <Route path='/mueble/:idMueble' element={<MueblesFormulario />} />
 

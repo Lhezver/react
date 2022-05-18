@@ -18,8 +18,7 @@ function CategoriasFormulario() {
     const [categoria, setCategoria] = useState({
         id: 0,
         categoria: '',
-        subcategoria: '',
-        cantidad: 0
+        subcategoria: ''
     });
 
     const GuardarCategoria = () => {
@@ -27,8 +26,7 @@ function CategoriasFormulario() {
             axios.put(`http://localhost:8000/categorias/${params.idCategoria}`, {
                 id: params.idCategoria,
                 categoria: inputCategoria.current.value,
-                subcategoria: inputSubcategoria.current.value,
-                cantidad: 0
+                subcategoria: inputSubcategoria.current.value
             })
                 .then(() => {
                     navigate('/categorias');
@@ -37,8 +35,7 @@ function CategoriasFormulario() {
         } else {
             axios.post('http://localhost:8000/categorias', {
                 categoria: inputCategoria.current.value,
-                subcategoria: inputSubcategoria.current.value,
-                cantidad: 0
+                subcategoria: inputSubcategoria.current.value
             })
                 .then(() => {
                     navigate('/categorias');

@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 
-function MueblesListado(props) {
+function MueblesListado() {
   let formatter = new Intl.NumberFormat('es-AR', {
     style: 'currency',
     currency: 'ARS',
   });
+
+  const navigate = useNavigate();
 
   const [muebles, setMuebles] = useState([]);
   const [busqueda, setBusqueda] = useState('');
@@ -33,6 +35,13 @@ function MueblesListado(props) {
     }
   });
 
+  const inputFechaPedido = useRef();
+  const inputFechaArribo = useRef();
+  const inputCantidadPedido = useRef();
+
+  const inputNombreCliente = useRef();
+  const inputDNICliente = useRef();
+
   useEffect(() => {
     ObtenerMuebles()
   }, [])
@@ -54,7 +63,7 @@ function MueblesListado(props) {
     }
   }
 
-  const SetearBorrar = (muebleId) => {
+  const SetearMueble = (muebleId) => {
     axios.get(`http://localhost:8000/muebles/${muebleId}`)
       .then(response => {
         setMueble(response.data);
@@ -72,14 +81,38 @@ function MueblesListado(props) {
       })
   }
 
+  const PedirMueble = () => {
+    axios.post(`http://localhost:8000/pedidos/`, {
+      fecha: inputFechaPedido.current.value,
+      fecha_arribo: inputFechaArribo.current.value,
+      cantidad: inputCantidadPedido.current.value,
+      id_categoria: mueble.categoria.id,
+      id_fabricante: mueble.fabricante.id
+    })
+      .then(() => {
+        navigate('/pedidos');
+      })
+      .catch(() => {
+        alert('Hubo un error al pedir el mueble')
+      })
+  }
+
+  const VenderMueble = () => {
+    axios.post(`http://localhost:8000/facturas/`, {
+      dni: inputDNICliente.current.value,
+      nombre_cliente: inputNombreCliente.current.value,
+      serie_mueble: mueble.nro_serie
+    })
+      .then(() => {
+        navigate('/ventas');
+      })
+      .catch(() => {
+        alert('Hubo un error al vender el mueble')
+      })
+  }
+
   return (
     <>
-      <div className="row d-flex justify-content-center mt-2">
-        <div className="col-4 d-flex justify-content-center">
-          <button type="button" className="btn btn-info">Carrito de Compra</button>
-        </div>
-      </div>
-
       <div className="row">
 
         <div className="form-check">
@@ -147,10 +180,12 @@ function MueblesListado(props) {
                 <td>{mueble.fabricante.nombre}</td>
                 <td>{mueble.precio}</td>
                 <td>
+                  <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ventaModal" onClick={() => SetearMueble(mueble.nro_serie)}>Vender</button>
+                  <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pedidoModal" onClick={() => SetearMueble(mueble.nro_serie)}>Pedir</button>
                   <Link to={'/mueble/' + mueble.nro_serie}>
                     <button type="button" className="btn btn-warning">Editar</button>
                   </Link>
-                  <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearBorrar(mueble.nro_serie)}>Borrar</button>
+                  <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalBorrar" onClick={() => SetearMueble(mueble.nro_serie)}>Borrar</button>
                 </td>
               </tr>
             ))}
@@ -158,6 +193,7 @@ function MueblesListado(props) {
         </table>
       </div>
 
+      {/*Modal vender*/}
       <div className="modal fade" id="ventaModal">
         <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div className="modal-content">
@@ -168,22 +204,61 @@ function MueblesListado(props) {
             <div className="modal-body">
               <form>
                 <div className="mb-3">
-                  <p>Número de serie alfanumérico: {mueble.nro_serie}</p>
                   <p>Categoría:{mueble.categoria.categoria}</p>
                   <p>Subcategoría: {mueble.categoria.subcategoria}</p>
                   <p>Fabricante: {mueble.fabricante.nombre}</p>
                   <p>Precio: {mueble.precio}</p>
-                  <p>Fecha de fabricación: {mueble.fecha_fabricacion}</p>
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="cantidad" className="col-form-label">Cantidad:</label>
-                  <input type="number" className="form-control" id="cantidad" defaultValue="0"></input>
+                  <label htmlFor="nombrecliente" className="col-form-label">Nombre del Cliente:</label>
+                  <input type="text" className="form-control" id="nombrecliente" ref={inputNombreCliente}></input>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="dnicliente" className="col-form-label">DNI del Cliente:</label>
+                  <input type="number" className="form-control" id="dnicliente" ref={inputDNICliente} defaultValue="0"></input>
                 </div>
               </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" className="btn btn-primary">Vender</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => VenderMueble()}>Vender</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/*Modal pedir*/}
+      <div className="modal fade" id="pedidoModal">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="pedidoModalLabel">Realizar pedido</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="mb-3">
+                  <p>Categoría:{mueble.categoria.categoria}</p>
+                  <p>Subcategoría: {mueble.categoria.subcategoria}</p>
+                  <p>Fabricante: {mueble.fabricante.nombre}</p>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="fechapedido" className="col-form-label">Fecha de Pedido:</label>
+                  <input type="date" className="form-control" id="fechapedido" ref={inputFechaPedido}></input>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="fechaarribo" className="col-form-label">Fecha estimada de Arribo:</label>
+                  <input type="date" className="form-control" id="fechaarribo" ref={inputFechaArribo}></input>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="cantidad" className="col-form-label">Cantidad:</label>
+                  <input type="number" className="form-control" id="cantidad" defaultValue="0" ref={inputCantidadPedido}></input>
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => PedirMueble()}>Pedir</button>
             </div>
           </div>
         </div>
@@ -198,27 +273,20 @@ function MueblesListado(props) {
               <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
-            <p>Número de serie alfanumérico: {mueble.nro_serie}</p>
-                  <p>Categoría: {mueble.categoria.categoria}</p>
-                  <p>Subcategoría: {mueble.categoria.subcategoria}</p>
-                  <p>Fabricante: {mueble.fabricante.nombre}</p>
-                  <p>Precio: {mueble.precio}</p>
-                  <p>Fecha de fabricación: {mueble.fecha_fabricacion}</p>
+              <p>Número de serie alfanumérico: {mueble.nro_serie}</p>
+              <p>Categoría: {mueble.categoria.categoria}</p>
+              <p>Subcategoría: {mueble.categoria.subcategoria}</p>
+              <p>Fabricante: {mueble.fabricante.nombre}</p>
+              <p>Precio: {mueble.precio}</p>
+              <p>Fecha de fabricación: {mueble.fecha_fabricacion}</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={()=>EliminarMueble()}>Eliminar</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => EliminarMueble()}>Eliminar</button>
             </div>
           </div>
         </div>
       </div>
-
-      {props.getCarrito.map((item) => {
-        console.log(item.categoria)
-      })}
-      {
-        console.log('Ignorar lo que está abajo')
-      }
     </>
   );
 }
