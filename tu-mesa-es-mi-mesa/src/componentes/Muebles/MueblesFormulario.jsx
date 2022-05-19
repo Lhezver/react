@@ -40,6 +40,9 @@ function MueblesFormulario() {
     }
   });
 
+  const [categorias, setCategorias] = useState([]);
+  const [fabricantes, setFabricantes] = useState([]);
+
   const GuardarMueble = () => {
     if (params.idMueble) {
       axios.put(`http://localhost:8000/muebles/${params.idMueble}`, {
@@ -79,6 +82,22 @@ function MueblesFormulario() {
       .catch(error => alert(error))
   }
 
+  const ObtenerCategorias = () => {
+    axios.get(`http://localhost:8000/categorias/`)
+      .then(response => {
+        setCategorias(response.data);
+      })
+      .catch(error => alert(error))
+  }
+
+  const ObtenerFabricantes = () => {
+    axios.get(`http://localhost:8000/fabricantes/`)
+      .then(response => {
+        setFabricantes(response.data);
+      })
+      .catch(error => alert(error))
+  }
+
   useEffect(() => {
     if (params.idMueble) {
       setSubtitulo('Editar Mueble');
@@ -86,6 +105,11 @@ function MueblesFormulario() {
       ObtenerMueble()
     }
   }, [params.idMueble])
+
+  useEffect(() => {
+    ObtenerCategorias();
+    ObtenerFabricantes();
+  }, [])
 
 
   return (
@@ -95,11 +119,15 @@ function MueblesFormulario() {
         <form>
           <div className="mb-3">
             <label htmlFor="nroserie" className="col-form-label">Nro de Serie:</label>
-            <input type="text" className="form-control" disabled id="nroserie" ref={inputNroSerie} defaultValue={mueble.nro_serie}></input>
+            <input type="text" className="form-control" id="nroserie" ref={inputNroSerie} defaultValue={mueble.nro_serie}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="categoria" className="col-form-label">Categoría:</label>
-            <input type="number" className="form-control" id="categoria" ref={inputIdCategoria} defaultValue={mueble.id_categoria}></input>
+            <select className="form-select" aria-label="Default select example" id="categoria" ref={inputIdCategoria} defaultValue={mueble.id_categoria}>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>{categoria.categoria}, {categoria.subcategoria}</option>
+              ))}
+            </select>
           </div>
           <div className="mb-3">
             <label htmlFor="fecha" className="col-form-label">Fecha:</label>
@@ -107,7 +135,11 @@ function MueblesFormulario() {
           </div>
           <div className="mb-3">
             <label htmlFor="fabricante" className="col-form-label">Fabricante:</label>
-            <input type="number" className="form-control" id="fabricante" ref={inputIdFabricante} defaultValue={mueble.id_fabricante}></input>
+            <select className="form-select" aria-label="Default select example" id="fabricante" ref={inputIdFabricante} defaultValue={mueble.id_fabricante}>
+              {fabricantes.map((fabricante) => (
+                <option key={fabricante.id} value={fabricante.id}>{fabricante.nombre}</option>
+              ))}
+            </select>
           </div>
           <div className="mb-3">
             <label htmlFor="precio" className="col-form-label">Precio:</label>
