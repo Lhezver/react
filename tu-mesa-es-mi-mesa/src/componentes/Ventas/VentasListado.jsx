@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 
 function VentasListado() {
+    let formatter = new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+      });
+    
     const [ventas, setVentas] = useState([]);
     const [busqueda, setBusqueda] = useState('');
     const [venta, setVenta] = useState({
@@ -82,7 +87,7 @@ function VentasListado() {
                                 <th scope="row">{venta.nro}</th>
                                 <td>{venta.nombre_cliente}</td>
                                 <td>{venta.dni}</td>
-                                <td>{venta.mueble.precio}</td>
+                                <td>{formatter.format(venta.mueble.precio)}</td>
                                 <td>
                                     <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVer" onClick={() => SetearVenta(venta.nro)}>Ver</button>
                                 </td>
@@ -105,7 +110,7 @@ function VentasListado() {
                             <p>Categoria: {venta.mueble.categoria.categoria}</p>
                             <p>Subcategoria: {venta.mueble.categoria.subcategoria}</p>
                             <p>Fabricante: {venta.mueble.fabricante.nombre}</p>
-                            <p>Precio: {venta.mueble.precio}</p>
+                            <p>Precio: {formatter.format(venta.mueble.precio)}</p>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
