@@ -19,12 +19,25 @@ function MueblesFormulario() {
   const [textoBoton, setTextoBoton] = useState('Crear');
 
   const [mueble, setMueble] = useState({
-    nro_serie: '',
-    id_categoria: 0,
     fecha_fabricacion: '',
-    precio: 0,
+    id_categoria: 0,
     disponible: 0,
-    id_fabricante: 0
+    nro_serie: '',
+    precio: 0,
+    id_fabricante: 0,
+    categoria: {
+      subcategoria: '',
+      categoria: '',
+      id: 1
+    },
+    fabricante: {
+      nombre: '',
+      direccion: '',
+      contacto: '',
+      telefono: 0,
+      id: 0,
+      observaciones: ''
+    }
   });
 
   const GuardarMueble = () => {
@@ -34,7 +47,6 @@ function MueblesFormulario() {
         id_categoria: inputIdCategoria.current.value,
         fecha_fabricacion: inputFecha.current.value,
         precio: inputPrecio.current.value,
-        disponible: 0,
         id_fabricante: inputIdFabricante.current.value
       })
         .then(() => {
@@ -47,7 +59,6 @@ function MueblesFormulario() {
         id_categoria: inputIdCategoria.current.value,
         fecha_fabricacion: inputFecha.current.value,
         precio: inputPrecio.current.value,
-        disponible: 0,
         id_fabricante: inputIdFabricante.current.value
       })
         .then(() => {
@@ -82,9 +93,9 @@ function MueblesFormulario() {
       <div className="row">
         <h2 className="text-center" ref={subtituloH2}>{subtitulo}</h2>
         <form>
-        <div className="mb-3">
+          <div className="mb-3">
             <label htmlFor="nroserie" className="col-form-label">Nro de Serie:</label>
-            <input type="text" className="form-control" id="nroserie" ref={inputNroSerie} defaultValue={mueble.nro_serie}></input>
+            <input type="text" className="form-control" disabled id="nroserie" ref={inputNroSerie} defaultValue={mueble.nro_serie}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="categoria" className="col-form-label">Categoría:</label>
