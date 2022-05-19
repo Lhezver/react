@@ -88,7 +88,7 @@ function MueblesFormulario() {
           </div>
           <div className="mb-3">
             <label htmlFor="categoria" className="col-form-label">Categoría:</label>
-            <input type="text" className="form-control" id="categoria" ref={inputIdCategoria} defaultValue={mueble.id_categoria}></input>
+            <input type="number" className="form-control" id="categoria" ref={inputIdCategoria} defaultValue={mueble.id_categoria}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="fecha" className="col-form-label">Fecha:</label>
@@ -96,7 +96,7 @@ function MueblesFormulario() {
           </div>
           <div className="mb-3">
             <label htmlFor="fabricante" className="col-form-label">Fabricante:</label>
-            <input type="text" className="form-control" id="fabricante" ref={inputIdFabricante} defaultValue={mueble.id_fabricante}></input>
+            <input type="number" className="form-control" id="fabricante" ref={inputIdFabricante} defaultValue={mueble.id_fabricante}></input>
           </div>
           <div className="mb-3">
             <label htmlFor="precio" className="col-form-label">Precio:</label>
