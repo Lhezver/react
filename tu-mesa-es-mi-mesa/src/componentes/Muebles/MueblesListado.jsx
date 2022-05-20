@@ -100,19 +100,23 @@ function MueblesListado() {
   }
 
   const MueblesFabricantes = () => {
-    axios.get(`http://localhost:8000/muebles/fabricantes/${inputFiltro.current.value}`)
-      .then((response) => {
-        setMuebles(response.data);
-      })
-      .catch((e) => alert(e));
+    if (inputFiltro.current.value != '') {
+      axios.get(`http://localhost:8000/muebles/fabricantes/${inputFiltro.current.value}`)
+        .then((response) => {
+          setMuebles(response.data);
+        })
+        .catch((e) => alert(e));
+    }
   }
 
   const FabricantesMuebles = () => {
-    axios.get(`http://localhost:8000/muebles/categorias/${inputFiltro.current.value}`)
-      .then((response) => {
-        setMuebles(response.data);
-      })
-      .catch((e) => alert(e));
+    if (inputFiltro.current.value != '') {
+      axios.get(`http://localhost:8000/muebles/categorias/${inputFiltro.current.value}`)
+        .then((response) => {
+          setMuebles(response.data);
+        })
+        .catch((e) => alert(e));
+    }
   }
 
   const MueblesStock = () => {
@@ -163,9 +167,9 @@ function MueblesListado() {
             {muebles.map((mueble) => (
               <tr key={mueble.nro_serie}>
                 <th scope="row">{mueble.nro_serie}</th>
-                <td>{mueble.categoria.categoria}</td>
+                <td>{'(' + mueble.categoria.id + ') ' + mueble.categoria.categoria}</td>
                 <td>{mueble.categoria.subcategoria}</td>
-                <td>{mueble.fabricante.nombre}</td>
+                <td>{'(' + mueble.fabricante.id + ') ' + mueble.fabricante.nombre}</td>
                 <td>{formatter.format(mueble.precio)}</td>
                 <td>
                   {mueble.disponible == 1 ?

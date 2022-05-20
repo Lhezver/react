@@ -39,11 +39,13 @@ function PedidosListado() {
     }
 
     const ObtenerFiltro = () => {
-        axios.get(`http://localhost:8000/pedidos/search/${inputFecha.current.value}`)
-            .then((response) => {
-                setPedidos(response.data);
-            })
-            .catch((e) => alert(e));
+        if (inputFecha.current.value != '') {
+            axios.get(`http://localhost:8000/pedidos/search/${inputFecha.current.value}`)
+                .then((response) => {
+                    setPedidos(response.data);
+                })
+                .catch((e) => alert(e));
+        }
     }
 
 

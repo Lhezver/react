@@ -38,7 +38,7 @@ function FabricantesListado() {
 
   const SetearBorrar = (fabricanteId) => {
     axios.get(`http://localhost:8000/fabricantes/${fabricanteId}`)
-      .then(response =>{
+      .then(response => {
         setFabricante(response.data);
       })
       .catch(error => alert(error))
@@ -46,13 +46,13 @@ function FabricantesListado() {
 
   const EliminarFabricante = () => {
     axios.delete(`http://localhost:8000/fabricantes/${fabricante.id}`)
-        .then(() => {
-          ObtenerFabricantes()
-        })
-        .catch(() => {
-            alert('Hubo un error al eliminar el fabricante')
-        })
-}
+      .then(() => {
+        ObtenerFabricantes()
+      })
+      .catch((e) => {
+        alert(e.response.data.detail);
+      })
+  }
 
   return (
     <>
@@ -115,7 +115,7 @@ function FabricantesListado() {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={()=>EliminarFabricante()}>Eliminar</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => EliminarFabricante()}>Eliminar</button>
             </div>
           </div>
         </div>

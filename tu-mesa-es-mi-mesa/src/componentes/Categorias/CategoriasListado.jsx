@@ -45,9 +45,9 @@ function CategoriasListado() {
             .then(() => {
                 ObtenerCategorias()
             })
-            .catch(() => {
-                alert('Hubo un error al eliminar la categoría')
-            })
+            .catch((e) => {
+                alert(e.response.data.detail);
+              })
     }
 
     return (
