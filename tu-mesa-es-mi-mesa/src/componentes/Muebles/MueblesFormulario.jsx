@@ -98,6 +98,15 @@ function MueblesFormulario() {
       .catch(error => alert(error))
   }
 
+  const { id_categoria, id_fabricante } = mueble;
+
+  const formularioCambia = (targetEvent) => {
+    setMueble({
+      ...mueble,
+      [targetEvent.name]: targetEvent.value,
+    })
+  }
+
   useEffect(() => {
     if (params.idMueble) {
       setSubtitulo('Editar Mueble');
@@ -123,7 +132,7 @@ function MueblesFormulario() {
           </div>
           <div className="mb-3">
             <label htmlFor="categoria" className="col-form-label">Categoría:</label>
-            <select className="form-select" aria-label="Default select example" id="categoria" ref={inputIdCategoria} defaultValue={mueble.id_categoria}>
+            <select className="form-select" aria-label="Default select example" id="categoria" name="id_categoria" ref={inputIdCategoria} value={id_categoria} onChange={(e) => formularioCambia(e.target)}>
               {categorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>{categoria.categoria}, {categoria.subcategoria}</option>
               ))}
@@ -135,7 +144,7 @@ function MueblesFormulario() {
           </div>
           <div className="mb-3">
             <label htmlFor="fabricante" className="col-form-label">Fabricante:</label>
-            <select className="form-select" aria-label="Default select example" id="fabricante" ref={inputIdFabricante} defaultValue={mueble.id_fabricante}>
+            <select className="form-select" aria-label="Default select example" id="fabricante" name='id_fabricante' ref={inputIdFabricante} value={id_fabricante} onChange={(e) => formularioCambia(e.target)}>
               {fabricantes.map((fabricante) => (
                 <option key={fabricante.id} value={fabricante.id}>{fabricante.nombre}</option>
               ))}
